@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    @*<div class="sidebar">
+    <NavMenu />
+    </div>*@
+
+    <main>
+        @* <div class="top-row px-4">
+        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>*@
+
+        <Bar Class="navbar-bg" Breakpoint="Breakpoint.Desktop"
+             
+             ThemeContrast="ThemeContrast.Light">
+            <BarBrand>
+                
+                    <img src="img/logobbvaleasing.png" width="132" height="50" style="margin: 1rem 25rem 10rem 1rem;" />
+                
+            </BarBrand>
+            <BarToggler />
+            <BarMenu>
+                <BarStart>
+                    <BarItem>
+                        <BarLink TextColor="TextColor.White" To="#home">CSC</BarLink>
+                    </BarItem>
+                    <BarItem>
+                        <BarLink TextColor="TextColor.White" To="#docs">SUC</BarLink>
+                    </BarItem>
+                    <BarItem>
+                         <BarItem>
+                        <BarLink TextColor="TextColor.White" To="#docs">Desembolso Electrónico</BarLink>
+                    </BarItem>
+                    </BarItem>
+                </BarStart>
+                @*<BarEnd>
+                <BarItem>
+                <Button Color="Color.Primary">Sign up</Button>
+                <Button Color="Color.Secondary">Log in</Button>
+                </BarItem>
+                </BarEnd>*@
+            </BarMenu>
+        </Bar>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

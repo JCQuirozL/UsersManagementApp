@@ -1,0 +1,353 @@
+﻿
+:root {
+    --azulBBVA: #1973b7;
+    --darkBlueBBVA: #072146;
+    --lightBlueBBVA: #DEF2FE;
+}
+
+@font-face {
+    font-family: 'bentonsansbbva-bold';
+    src: url('../typo/bentonsansbbva-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'bentonsansbbva-book';
+    src: url('../typo/bentonsansbbva-book.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'bentonsansbbva-medium';
+    src: url('../typo/bentonsansbbva-medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'bentonsansbbva-light';
+    src: url('../typo/bentonsansbbva-light.ttf') format('truetype');
+}
+
+.navbar-bg{
+    background:var(--darkBlueBBVA) !important;
+    height: 20rem !important;
+}
+body {
+    font-family: bentonsansbbva-book !important;
+}
+
+.btn-primary {
+    color: #fff !important;
+    background-color: var(--azulBBVA) !important;
+    font-weight: 600 !important;
+    transition: all .3s !important;
+}
+
+    .btn-primary:hover {
+        background-color: var(--darkBlueBBVA) !important;
+        box-shadow: none;
+    }
+
+    .btn-primary:active {
+        opacity: .5 !important;
+    }
+
+
+.btn-secondary {
+    background-color: #fff !important;
+    color: var(--azulBBVA) !important;
+    font-weight: 600 !important;
+}
+
+.btn-flat-secondary, .btn-flat-secondary:focus, .btn-flat-secondary:hover, .btn-outline-secondary, .btn-outline-secondary:focus, .btn-outline-secondary:hover {
+    color: #03dac6 !important;
+    font-weight: 600 !important;
+}
+
+
+.font-weight-bold {
+    font-weight: 600 !important;
+}
+
+.table tbody td, .table tbody th {
+    height: 3.25rem !important;
+    letter-spacing: .0178571429em !important;
+    line-height: 1.25rem !important;
+    font-family: bentonsansbbva-book !important;
+    padding: .5rem;
+}
+
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    font-family: 'bentonsansbbva-bold' !important;
+    margin-bottom: 0.5rem;
+}
+
+.btn-blueBBVA {
+    background-color: var(--azulBBVA) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+
+    .btn-blueBBVA:hover, .btn-blueBBVA:focus, .btn-blueBBVA:active {
+        color: white !important;
+    }
+
+    .btn-blueBBVA:hover {
+        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)) !important;
+    }
+
+    .btn-blueBBVA:focus, .btn-blueBBVA.focus {
+        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)) !important;
+    }
+
+    .btn-blueBBVA.active {
+        background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.32)) !important;
+        transition: background-image 15ms linear 0.2s;
+    }
+
+.btn-flat-blueBBVA, .btn-flat-blueBBVA:hover, .btn-flat-blueBBVA:focus,
+.btn-outline-blueBBVA,
+.btn-outline-blueBBVA:hover,
+.btn-outline-blueBBVA:focus,
+.modal .btn-blueBBVA,
+.modal .btn-blueBBVA:hover,
+.modal .btn-blueBBVA:focus {
+    /*color: #072146 !important;*/
+}
+
+    .btn-flat-blueBBVA:hover,
+    .btn-outline-blueBBVA:hover,
+    .modal .btn-blueBBVA:hover {
+        background-image: linear-gradient(to bottom, rgba(98, 0, 238, 0.04), rgba(98, 0, 238, 0.04)) !important;
+    }
+
+    .btn-flat-blueBBVA:focus,
+    .btn-outline-blueBBVA:focus,
+    .modal .btn-blueBBVA:focus {
+        background-image: linear-gradient(to bottom, rgba(98, 0, 238, 0.12), rgba(98, 0, 238, 0.12)) !important;
+    }
+
+    .btn-flat-blueBBVA:disabled, .btn-flat-blueBBVA.disabled,
+    .btn-outline-blueBBVA:disabled,
+    .btn-outline-blueBBVA.disabled,
+    .modal .btn-blueBBVA:disabled,
+    .modal .btn-blueBBVA.disabled {
+        color: white !important;
+    }
+
+.text-detailsColor {
+    color: #1973B8 !important;
+}
+
+
+.background {
+    height: 48px !important;
+    border-radius: 1px !important;
+    background-color: #F4F4F4 !important;
+    padding-left: 1rem;
+}
+
+.table-secondary, .table-secondary > td, .table-secondary > th {
+    background-color: #DEF2FE !important;
+    color: rgba(0,0,0,.87) !important;
+}
+
+.table {
+    --bs-table-hover-bg: #d7d9dd !important;
+    width: 100%;
+}
+
+strong {
+    font-weight: bolder !important;
+}
+
+
+@media (max-width: 600px) {
+    .background {
+        width: 100px;
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .background {
+        width: 50px;
+        padding-left: 1rem;
+    }
+}
+
+::selection {
+    background-color: rgb(255 255 255 / 8%) !important;
+}
+
+.page-link {
+    color: var(--azulBBVA) !important;
+    font-weight: 600 !important;
+    border: none;
+}
+
+.page-item.disabled .page-link {
+    color: rgba(0,0,0,.38) !important;
+}
+
+a, a:hover {
+    color: #043263 !important;
+}
+
+.justify-content-between {
+    justify-content: center !important;
+}
+
+.form-control:not(textarea) {
+    font-size: 14px !important;
+    height: 40px;
+    background-color: #F4F4F4 !important;
+    padding-left: .5rem;
+    caret-color: var(--azulBBVA);
+}
+
+.text-secondary {
+    color: #044481 !important;
+}
+
+.modal-footer {
+    justify-content: center;
+    padding: 1.25rem 1.5rem !important;
+}
+
+.modal-body {
+    padding: 2.5rem 2.5rem !important;
+    margin-top: -10px;
+}
+
+.btn {
+    text-transform: none !important;
+    border-radius: 0px !important;
+    min-width: 7rem !important;
+}
+
+label {
+    font-family: bentonsansbbva-medium;
+    text-transform: capitalize !important;
+    color: #000;
+}
+
+
+
+
+.snackbar-info {
+    background-color: #277a3e !important;
+    color: #fff !important;
+    min-width: 1920px !important;
+    min-height: 50px !important;
+    margin-bottom: -25px !important;
+}
+
+.snackbar-danger {
+    min-width: 1920px !important;
+    min-height: 50px !important;
+    margin-bottom: -25px !important;
+}
+
+.center-snack {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding-left: 45%;
+}
+
+span {
+    font-family: 'bentonsansbbva-book' !important;
+}
+
+.centered {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.material-icons {
+    font-size: 80px !important;
+    color: #1973B8;
+}
+
+.material-icons-two-tone {
+    color: #1973B8;
+}
+
+.b-numeric-handler-wrap {
+    visibility: hidden !important;
+}
+
+.btn {
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%), 0 3px 1px -2px rgb(0 0 0 / 20%) !important;
+}
+
+div::selection, h1::selection, h2::selection, h3::selection, h4::selection, h5::selection, p::selection, label::selection, span::selection, th::selection, td::selection, input::selection, strong::selection {
+    color: var(--lightBlueBBVA) !important;
+    background: var(--darkBlueBBVA) !important;
+}
+
+.from-to {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0;
+}
+
+.nbar-bg {
+    background-color: var(--darkBlueBBVA) !important;
+    height: fit-content !important;
+}
+
+.top-air {
+    margin: 7rem 0 3rem 1rem;
+}
+
+.breakin-word {
+    word-break: break-word !important;
+}
+
+th {
+    text-align: center !important;
+}
+
+.table-responsive {
+    max-height: 400px !important;
+    margin-bottom: 1rem;
+}
+
+#btnSave {
+    margin-right: .25rem;
+}
+
+.row {
+    max-width: 101%;
+}
+
+input, select {
+    text-transform: uppercase !important;
+}
+
+select {
+    font-size: 14px !important;
+}
+
+.error-message {
+    background-color: darkred;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.icons-color {
+    color: var(--darkBlueBBVA);
+}
+
+.text-info {
+    color: var(--darkBlueBBVA) !important;
+}
+
+.custom-control{
+    padding-left: 1.5rem !important;
+}
