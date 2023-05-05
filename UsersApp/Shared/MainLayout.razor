@@ -10,27 +10,24 @@
         <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>*@
 
-        <Bar Class="navbar-bg" Breakpoint="Breakpoint.Desktop"
-             
+        <Bar Position="Position.Static" Class="navbar-bg" Breakpoint="Breakpoint.Desktop"
              ThemeContrast="ThemeContrast.Light">
             <BarBrand>
-                
-                    <img src="img/logobbvaleasing.png" width="132" height="50" style="margin: 1rem 25rem 10rem 1rem;" />
-                
+
+                <img src="img/logobbvaleasing.png" width="132" height="50" style="margin: 1rem 25rem 1rem 1rem;" />
+
             </BarBrand>
             <BarToggler />
             <BarMenu>
                 <BarStart>
                     <BarItem>
-                        <BarLink TextColor="TextColor.White" To="#home">CSC</BarLink>
+                        <BarLink Class="bar-links" TextColor="TextColor.White" To="CSC">CSC</BarLink>
                     </BarItem>
                     <BarItem>
-                        <BarLink TextColor="TextColor.White" To="#docs">SUC</BarLink>
+                        <BarLink Class="bar-links" TextColor="TextColor.White" To="#docs">SUC</BarLink>
                     </BarItem>
                     <BarItem>
-                         <BarItem>
-                        <BarLink TextColor="TextColor.White" To="#docs">Desembolso Electrónico</BarLink>
-                    </BarItem>
+                        <BarLink Class="bar-links" TextColor="TextColor.White" To="#docs">Desembolso Electrónico</BarLink>
                     </BarItem>
                 </BarStart>
                 @*<BarEnd>
