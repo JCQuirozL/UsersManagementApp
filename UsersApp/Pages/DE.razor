@@ -1,0 +1,224 @@
+﻿@page "/DE"
+
+<Div Class="row">
+    <h4 style="padding:2rem 0 1rem 0 !important;">Usuarios Desembolso Electrónico</h4>
+</Div>
+
+
+<Div Class="row">
+    <FocusTrap Active>
+        <TextEdit Autofocus Class="col-6 background"
+                  Placeholder="Buscar" @bind-Text="@SearchFilter">
+        </TextEdit>
+    </FocusTrap>
+</Div>
+
+<Div Class="col-9">
+    <Div Class="row">
+        <Paragraph Style="padding:4rem 0 1rem 0 !important;">A continuación se muestra el listado de usuarios correspondientes a <strong>Desembolso Electrónico</strong></Paragraph>
+    </Div>
+</Div>
+
+<DataGrid TItem="DEUser" Data="UsersList" @bind-SelectedRow="@SelectedItem"
+          Editable
+          ShowPager
+          PageSize=5
+          Responsive="true"
+          EditMode="DataGridEditMode.Popup"
+          FixedHeader="true"
+          Hoverable
+          CommandMode="DataGridCommandMode.Commands"
+          UseInternalEditing=true
+          Style="margin-bottom: 0 !important;" UseValidation=true
+          SelectedRowStyling="@OnSelectedRowStyling"
+          RowStyling="@OnRowStyling"
+          CustomFilter="@OnCustomFilter">
+
+    <PopupTitleTemplate>
+        <ModalTitle>
+            Editar usuario
+        </ModalTitle>
+    </PopupTitleTemplate>
+    <DataGridColumns>
+        <DataGridColumn TItem="DEUser" Field="@nameof(DEUser.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="DEUser" Field="@nameof(DEUser.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var departmentId = (context as DEUser)?.DepartmentId;
+                    @(AllDepartments.FirstOrDefault(x => x.Id == departmentId)?.Name)
+                }
+            </DisplayTemplate>
+
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="DEDepartments"
+                            Data="@AllDepartments"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})"
+                            Class="background" />
+            </EditTemplate>
+        </DataGridColumn>
+
+        <DataGridColumn TItem="DEUser" Field="@nameof(DEUser.RolId)" Caption="ROL" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var rolId = (context as DEUser)?.RolId;
+                    @(AllRoles.FirstOrDefault(x => x.Id == rolId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="DERol"
+                            Data="@AllRoles"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})"
+                            Class="background" />
+            </EditTemplate>
+        </DataGridColumn>
+
+        <DataGridCheckColumn TItem="DEUser" Field="@nameof(DEUser.EsJefeInmediato)" Caption="JEFE INMEDIATO" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                <Check TValue="Boolean" Checked="@context.EsJefeInmediato" Disabled />
+            </DisplayTemplate>
+            <EditTemplate>
+                <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+            </EditTemplate>
+        </DataGridCheckColumn>
+
+        <DataGridColumn TItem="DEUser" Field="@nameof(DEUser.InfoDate)" Caption="CREADO" TextAlignment="TextAlignment.Center" DisplayFormat="{0:dd/MM/yyyy}" />
+
+        <DataGridColumn TItem="DEUser" Field="@nameof(DEUser.CreadoPor)" Caption="CREADO POR" TextAlignment="TextAlignment.Center" />
+
+
+        <DataGridCommandColumn>
+            <NewCommandTemplate>
+                <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
+            </NewCommandTemplate>
+            <EditCommandTemplate>
+                <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">
+                    <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                        <Icon Name="@("fas fa-user-edit")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+
+                    </Button>
+                </Tooltip>
+            </EditCommandTemplate>
+            <DeleteCommandTemplate>
+                <Tooltip Fade Text="Eliminar" Placement="TooltipPlacement.Top">
+                    <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                        <Icon Name="@("fas fa-trash-alt")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                    </Button>
+                </Tooltip>
+            </DeleteCommandTemplate>
+            <SaveCommandTemplate>
+                <Button ElementId="btnSave" Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary"
+                        Clicked="@context.Clicked" Size="Size.Large">
+                    Guardar
+                </Button>
+            </SaveCommandTemplate>
+            <CancelCommandTemplate>
+                <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@context.Clicked" Size="Size.Large">Cancelar</Button>
+            </CancelCommandTemplate>
+        </DataGridCommandColumn>
+    </DataGridColumns>
+
+</DataGrid>
+
+@code {
+    public List<DEUser> UsersList = new();
+
+    private DEUser SelectedItem { get; set; }
+
+    public String? SearchFilter { get; set; } = null;
+
+    IList<DEDepartments> AllDepartments;
+
+    IList<DERol> AllRoles;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            AllRoles = new List<DERol>
+            {
+                new DERol{Id=0,Name="- Seleccione -"},
+                new DERol{Id=1,Name="Autorizador"},
+                new DERol{Id=2,Name="Autorizador Archivos Adjuntos"},
+                new DERol{Id=3,Name="Compensación y Desembolso"},
+                new DERol{Id=4,Name="Comprobante de Pago"},
+                new DERol{Id=5,Name="Contabilización"},
+                new DERol{Id=6,Name="Contraloría"},
+                new DERol{Id=7,Name="Generación Desembolso"},
+                new DERol{Id=8,Name="Presupuestos"},
+            };
+
+            AllDepartments = new List<DEDepartments>
+            {
+                new DEDepartments{Id=0,Name="- Seleccione -"},
+                new DEDepartments{Id=1,Name="Adquisiciones"},
+                new DEDepartments{Id=2,Name="Control y Gestión de Activos"},
+                new DEDepartments{Id=3,Name="Dirección General"},
+                new DEDepartments{Id=4,Name="Diseño de Producto"},
+                new DEDepartments{Id=5,Name="Finanzas"},
+                new DEDepartments{Id=6,Name="Gestorías"},
+                new DEDepartments{Id=7,Name="Help Desk"},
+                new DEDepartments{Id=8,Name="Implant"},
+                new DEDepartments{Id=9,Name="Normativa y Regulación"},
+                new DEDepartments{Id=10,Name="Proveedores"},
+                new DEDepartments{Id=11,Name="Seguros"},
+                new DEDepartments{Id=12,Name="TI"},
+
+            };
+
+            await LoadUsers();
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    async Task LoadUsers()
+    {
+        try
+        {
+            UsersList.Add(new DEUser() { Id = 1, Name = "Luis Jorge Carrillo", RolId = 3, DepartmentId = 6, InfoDate = DateTime.Now, CreadoPor = "Rodolfo Pérez", EsJefeInmediato = false });
+            UsersList.Add(new DEUser() { Id = 2, Name = "Rodolfo Pérez", RolId = 1, DepartmentId = 4, InfoDate = DateTime.Now, CreadoPor = "Rodolfo Pérez", EsJefeInmediato = true });
+            UsersList.Add(new DEUser() { Id = 1, Name = "José Escudero", RolId = 5, DepartmentId = 7, InfoDate = DateTime.Now, CreadoPor = "Rodolfo Pérez", EsJefeInmediato = false });
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+    }
+
+    public static void OnSelectedRowStyling(DEUser user, DataGridRowStyling style)
+    {
+        style.Color = Color.Secondary;
+    }
+
+    //Evento para pintar el fondo de la fila
+    public static void OnRowStyling(DEUser user, DataGridRowStyling style)
+    {
+        style.Background = Background.Default;
+    }
+
+    public Boolean OnCustomFilter(DEUser model)
+    {
+        if (string.IsNullOrEmpty(SearchFilter))
+            return true;
+        else
+        {
+            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase);
+        }
+
+    }
+}

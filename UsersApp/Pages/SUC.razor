@@ -1,7 +1,7 @@
-﻿@page "/CSC"
+﻿@page "/SUC"
 
 <Div Class="row">
-    <h4 style="padding:2rem 0 1rem 0 !important;">Usuarios CSC</h4>
+    <h4 style="padding:2rem 0 1rem 0 !important;">Usuarios SUC</h4>
 </Div>
 
 
@@ -15,11 +15,11 @@
 
 <Div Class="col-9">
     <Div Class="row">
-        <Paragraph Style="padding:4rem 0 1rem 0 !important;">A continuación se muestra el listado de usuarios correspondientes al <strong>CSC</strong></Paragraph>
+        <Paragraph Style="padding:4rem 0 1rem 0 !important;">A continuación se muestra el listado de usuarios correspondientes al <strong>SUC</strong></Paragraph>
     </Div>
 </Div>
 
-<DataGrid TItem="CSCUser" Data="UsersList" @bind-SelectedRow="@SelectedItem"
+<DataGrid TItem="SUCUser" Data="UsersList" @bind-SelectedRow="@SelectedItem"
           Editable
           ShowPager
           PageSize=5
@@ -36,31 +36,33 @@
 
     <PopupTitleTemplate>
         <ModalTitle>
-            Editar usuario @SelectedItem.Name
+            Editar usuario
         </ModalTitle>
     </PopupTitleTemplate>
     <DataGridColumns>
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Position)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable />
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Department)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable />
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.GroupId)" Caption="GRUPO" TextAlignment="TextAlignment.Center" Editable>
+        <DataGridColumn TItem="SUCUser" Field="@nameof(SUCUser.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="SUCUser" Field="@nameof(SUCUser.UserName)" Caption="USUARIO" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="SUCUser" Field="@nameof(SUCUser.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
             <DisplayTemplate>
                 @{
-                    var groupId = (context as CSCUser)?.GroupId;
-                    @(AllGroups.FirstOrDefault(x => x.Id == groupId)?.Name)
+                    var departmentId = (context as SUCUser)?.DepartmentId;
+                    @(AllDepartments.FirstOrDefault(x => x.Id == departmentId)?.Name)
                 }
             </DisplayTemplate>
             <EditTemplate>
                 <SelectList TValue="int"
-                            TItem="CSCGroups"
-                            Data="@AllGroups"
-                            Class="background"
+                            TItem="SUCDepartments"
+                            Data="@AllDepartments"
+                            Multiple
                             TextField="@((item)=>item.Name)"
                             ValueField="@((item)=>item.Id)"
                             SelectedValue="@((int)((CellEditContext)context).CellValue)"
                             SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
             </EditTemplate>
         </DataGridColumn>
+
+        <DataGridColumn TItem="SUCUser" Field="@nameof(SUCUser.InfoDate)" Caption="CREADO" TextAlignment="TextAlignment.Center" DisplayFormat="{0:dd/MM/yyyy}" />
+
         <DataGridCommandColumn>
             <NewCommandTemplate>
                 <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
@@ -95,32 +97,28 @@
 </DataGrid>
 
 @code {
-    public List<CSCUser> UsersList = new();
+    public List<SUCUser> UsersList = new();
 
-    private CSCUser SelectedItem { get; set; }
+    private SUCUser SelectedItem { get; set; }
 
     public String? SearchFilter { get; set; } = null;
-    IList<CSCGroups> AllGroups;
 
-    //static string[] Grupos = { "MCR_CAE", "MCR_CCUsuario", "MCR_Desembolso", "MCR_Ejecutivos", "MCR_MC", "MCR_Tesoreria" };
-    //static IEnumerable<CSCGroups> IndexedGroups = Enumerable.Range(1, Grupos.Length).Select(x => new CSCGroups { Name = Grupos[x - 1], Id = x });
-
-
+    IList<SUCDepartments> AllDepartments;
 
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            AllGroups = new List<CSCGroups>
+            AllDepartments = new List<SUCDepartments>
             {
-                new CSCGroups{Id=1,Name="MCR_CAE"},
-                new CSCGroups{Id=2,Name="MCR_CCUsuario"},
-                new CSCGroups{Id=3,Name="MCR_Desembolso"},
-                new CSCGroups{Id=4,Name="MCR_Ejecutivos"},
-                new CSCGroups{Id=5,Name="MCR_Tesoreria"},
-                new CSCGroups{Id=6,Name="MCR_MC"}
-
+                new SUCDepartments{Id=1,Name="Administrador"},
+                new SUCDepartments{Id=2,Name="Ejecutivo SUC"},
+                new SUCDepartments{Id=3,Name="MFA"},
+                new SUCDepartments{Id=4,Name="Finanzas"},
+                new SUCDepartments{Id=5,Name="Supervisor CAE"},
+                new SUCDepartments{Id=6,Name="Ejecutivo CAE"},
+                new SUCDepartments{Id=7,Name="Supervisor"}
             };
 
             await LoadUsers();
@@ -136,11 +134,10 @@
     {
         try
         {
-            UsersList.Add(new CSCUser() { Id = 1, Name = "Luis Jorge Carrillo", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 2, Name = "Rodolfo Pérez Diego", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 3, Name = "José Escudero", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 4, Name = "Jazmin Gayosso", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-
+            UsersList.Add(new SUCUser() { Id = 1, Name = "Luis Jorge Carrillo", UserName = @"facileasing\UserName", DepartmentId = 6, InfoDate = DateTime.Now });
+            UsersList.Add(new SUCUser() { Id = 1, Name = "Rodolfo Pérez", UserName = @"facileasing\UserName", DepartmentId = 5, InfoDate = DateTime.Now });
+            UsersList.Add(new SUCUser() { Id = 1, Name = "José Escudero", UserName = @"facileasing\UserName", DepartmentId = 4, InfoDate = DateTime.Now });
+            UsersList.Add(new SUCUser() { Id = 1, Name = "Jazmín Gayosso", UserName = @"facileasing\UserName", DepartmentId = 3, InfoDate = DateTime.Now });
 
         }
         catch (Exception ex)
@@ -150,24 +147,24 @@
         }
     }
 
-    public static void OnSelectedRowStyling(CSCUser user, DataGridRowStyling style)
+    public static void OnSelectedRowStyling(SUCUser user, DataGridRowStyling style)
     {
         style.Color = Color.Secondary;
     }
 
     //Evento para pintar el fondo de la fila
-    public static void OnRowStyling(CSCUser user, DataGridRowStyling style)
+    public static void OnRowStyling(SUCUser user, DataGridRowStyling style)
     {
         style.Background = Background.Default;
     }
 
-    public Boolean OnCustomFilter(CSCUser model)
+    public Boolean OnCustomFilter(SUCUser model)
     {
         if (string.IsNullOrEmpty(SearchFilter))
             return true;
         else
         {
-            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.Position.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.Department.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase);
+            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.UserName.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.DepartmentId.Equals(AllDepartments.FirstOrDefault(x => x.Id == model.DepartmentId)?.Name);
         }
 
     }
