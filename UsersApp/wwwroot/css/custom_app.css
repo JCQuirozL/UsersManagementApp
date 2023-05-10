@@ -25,13 +25,15 @@
     src: url('../typo/bentonsansbbva-light.ttf') format('truetype');
 }
 
-.bar-links{
+.bar-links {
     padding: 1rem 2rem 2rem 1rem !important;
 }
-.navbar-bg{
-    background:var(--darkBlueBBVA) !important;
+
+.navbar-bg {
+    background: var(--darkBlueBBVA) !important;
     height: 15rem !important;
 }
+
 body {
     font-family: bentonsansbbva-book !important;
 }
@@ -58,6 +60,12 @@ body {
     color: var(--azulBBVA) !important;
     font-weight: 600 !important;
 }
+
+    .btn-secondary:hover {
+        background-color: var(--lightBlueBBVA) !important;
+        box-shadow: none;
+        color: var(--darkBlueBBVA) !important;
+    }
 
 .btn-flat-secondary, .btn-flat-secondary:focus, .btn-flat-secondary:hover, .btn-outline-secondary, .btn-outline-secondary:focus, .btn-outline-secondary:hover {
     color: #03dac6 !important;
@@ -316,6 +324,7 @@ th {
 }
 
 .table-responsive {
+    height: auto !important;
     max-height: 400px !important;
     margin-bottom: 1rem;
 }
@@ -352,6 +361,6 @@ select {
     color: var(--darkBlueBBVA) !important;
 }
 
-.custom-control{
+.custom-control {
     padding-left: 1.5rem !important;
 }
