@@ -36,7 +36,7 @@
 
     <PopupTitleTemplate>
         <ModalTitle>
-            Editar usuario @SelectedItem.Name
+            Editar usuario
         </ModalTitle>
     </PopupTitleTemplate>
     <DataGridColumns>
@@ -62,8 +62,12 @@
             </EditTemplate>
         </DataGridColumn>
         <DataGridCommandColumn>
+            <ChildContent>
+                <Button To="SUC">Prueba Me</Button>
+            </ChildContent>
+
             <NewCommandTemplate>
-                <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
+    <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
             </NewCommandTemplate>
             <EditCommandTemplate>
                 <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">

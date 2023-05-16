@@ -9,6 +9,18 @@
         public int GroupId { get; set; }
     }
 
+    public class Department
+    {
+        public int Id { get; set; }
+        public String Name { get; set; }
+        public IList<Title> PositionsList { get; set; }
+    }
+
+    public class Title
+    {
+        public int Id { get; set; }
+        public String Name { get; set; }
+    }
     public class CSCGroups
     {
         public Int32 Id { get; set; }

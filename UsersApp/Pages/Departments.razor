@@ -1,0 +1,205 @@
+﻿@page "/department"
+
+
+<Modal  Visible>
+    <ModalContent Centered Size="ModalSize.ExtraLarge">
+        <ModalHeader>
+            <ModalTitle>Departamentos</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <DataGrid TItem="Department" Data="AllDepartments" @bind-SelectedRow="@SelectedItem"
+                      Editable
+                      ShowPager
+                      PageSize=5
+                      Responsive="true"
+                      EditMode="DataGridEditMode.Popup"
+                      Hoverable
+                      CommandMode="DataGridCommandMode.Commands"
+                      UseInternalEditing=true
+                      Style="margin-bottom: 0 !important;"
+                      UseValidation=true
+                      DetailRowTrigger="@OnDetailRowShow"
+                      SelectedRowStyling="@OnSelectedRowStyling"
+                      RowStyling="@OnRowStyling"
+                      HeaderThemeContrast="ThemeContrast.Light"
+                      Sortable="false">
+                <PopupTitleTemplate>
+                    <ModalTitle>
+                        Editar Departamento
+                    </ModalTitle>
+                </PopupTitleTemplate>
+                <DataGridColumns>
+                    <DataGridColumn TItem="Department" Field="@nameof(Department.Id)" Caption="#" TextAlignment="TextAlignment.Center"/>
+                    <DataGridColumn TItem="Department" Field="@nameof(Department.Name)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable  Width="80%" />
+
+                    <DataGridCommandColumn>
+                        <NewCommandTemplate>
+                            <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo Departamento</Button>
+                        </NewCommandTemplate>
+                        <EditCommandTemplate>
+                            <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">
+                                <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                                    <Icon Name="@("fas fa-user-edit")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+
+                                </Button>
+                            </Tooltip>
+                        </EditCommandTemplate>
+                        <DeleteCommandTemplate>
+                            <Tooltip Fade Text="Eliminar" Placement="TooltipPlacement.Top">
+                                <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                                    <Icon Name="@("fas fa-trash-alt")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                                </Button>
+                            </Tooltip>
+                        </DeleteCommandTemplate>
+                        <SaveCommandTemplate>
+                            <Button ElementId="btnSave" Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary"
+                                    Clicked="@context.Clicked" Size="Size.Large">
+                                Guardar
+                            </Button>
+                        </SaveCommandTemplate>
+                        <CancelCommandTemplate>
+                            <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@context.Clicked" Size="Size.Large">Cancelar</Button>
+                        </CancelCommandTemplate>
+                    </DataGridCommandColumn>
+                </DataGridColumns>
+
+                <DetailRowTemplate>
+                    @{
+                        var positions = (context as Department).PositionsList;
+
+                        <DataGrid Narrow TItem="Title"
+                              Data="positions" @bind-SelectedRow="@SelectedTitle"
+                                  Editable
+                              Responsive="true"
+                              EditMode="DataGridEditMode.Popup"
+                              FixedHeader="true"
+                                  Hoverable
+                              CommandMode="DataGridCommandMode.Commands"
+                              UseInternalEditing=true
+                              UseValidation=true
+                              RowStyling="@OnRowStylingTitle"
+                              SelectedRowStyling="@OnSelectedRowStylingTitle"
+                              Context="anotherContext"
+                              Style="margin-bottom: 0 !important;"
+                              Sortable="false"
+                              HeaderThemeContrast="ThemeContrast.Light">
+                            <PopupTitleTemplate>
+                                <ModalTitle>
+                                    Editar puesto
+                                </ModalTitle>
+                            </PopupTitleTemplate>
+                            <DataGridColumns>
+                                <DataGridColumn TItem="Title" Field="@nameof(Title.Id)" Caption="#" TextAlignment="TextAlignment.Center" />
+                                <DataGridColumn TItem="Title" Field="@nameof(Title.Name)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable />
+                                <DataGridCommandColumn NewCommandAllowed="true" Context="anotherContext">
+                                    <NewCommandTemplate>
+                                        <Button Visibility="Visibility.Visible" Color="Color.Secondary" Clicked="@anotherContext.Clicked">Nuevo Puesto</Button>
+                                    </NewCommandTemplate>
+                                    <EditCommandTemplate>
+                                        <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">
+                                            <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@anotherContext.Clicked">
+                                                <Icon Name="@("fas fa-user-edit")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+
+                                            </Button>
+                                        </Tooltip>
+                                    </EditCommandTemplate>
+                                    <DeleteCommandTemplate>
+                                        <Tooltip Fade Text="Eliminar" Placement="TooltipPlacement.Top">
+                                            <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@anotherContext.Clicked">
+                                                <Icon Name="@("fas fa-trash-alt")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                                            </Button>
+                                        </Tooltip>
+                                    </DeleteCommandTemplate>
+                                    <SaveCommandTemplate>
+                                        <Button ElementId="btnSave" Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary"
+                                            Clicked="@anotherContext.Clicked" Size="Size.Large">
+                                            Guardar
+                                        </Button>
+                                    </SaveCommandTemplate>
+                                    <CancelCommandTemplate>
+                                        <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@anotherContext.Clicked" Size="Size.Large">Cancelar</Button>
+                                    </CancelCommandTemplate>
+                                </DataGridCommandColumn>
+                            </DataGridColumns>
+
+                        </DataGrid>
+                    }
+                </DetailRowTemplate>
+            </DataGrid>
+        </ModalBody>
+    </ModalContent>
+</Modal>
+
+@code {
+    public Modal modalRef;
+
+    public Title SelectedTitle { get; set; }
+
+    public Department SelectedItem { get; set; }
+
+    public IList<Department> AllDepartments { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+
+            AllDepartments = new List<Department>
+            {
+                new Department
+                {
+                    Id = 1, Name = "TI", PositionsList = new List<Title>
+                    {
+                        new Title { Id = 1, Name = "Desarrollo" },
+                        new Title { Id = 2, Name = "Infraestructura" }
+                    },
+                },
+
+                new Department
+                {
+                    Id = 2 , Name = "Ventas", PositionsList = new List<Title>
+                    {
+                        new Title { Id = 1, Name = "Ejecutivo" },
+                        new Title { Id = 2, Name = "Vendedor" }
+                    }
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+    }
+
+    public Boolean OnDetailRowShow(DetailRowTriggerEventArgs<Department> e)
+    {
+        //con ésta propiedad indicamos que el detalle se cerrará al dar clic en la misma fila o en una diferente,
+        //sólo un detalle abierto a la vez
+        e.Single = true;
+        return ((e.Item.Id == SelectedItem?.Id));
+    }
+
+    public static void OnSelectedRowStyling(Department d, DataGridRowStyling style)
+    {
+        style.Color = Color.Secondary;
+    }
+
+    public static void OnRowStyling(Department d, DataGridRowStyling style)
+    {
+        style.Background = Background.Default;
+    }
+
+    public static void OnRowStylingTitle(Title p, DataGridRowStyling style)
+    {
+        style.Background = Background.Default;
+    }
+
+    public static void OnSelectedRowStylingTitle(Title p, DataGridRowStyling style)
+    {
+        style.Color = Color.Secondary;
+    }
+
+}
