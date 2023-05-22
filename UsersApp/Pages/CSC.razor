@@ -41,8 +41,26 @@
     </PopupTitleTemplate>
     <DataGridColumns>
         <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Position)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable />
-        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.Department)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.PositionId)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable>
+        </DataGridColumn>
+        <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var departmentId = (context as CSCUser)?.DepartmentId;
+                    @(Departments.FirstOrDefault(x=>x.Id == departmentId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="Department"
+                            Data="@Departments"
+                            Class="background"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
+            </EditTemplate>
+        </DataGridColumn>
         <DataGridColumn TItem="CSCUser" Field="@nameof(CSCUser.GroupId)" Caption="GRUPO" TextAlignment="TextAlignment.Center" Editable>
             <DisplayTemplate>
                 @{
@@ -62,12 +80,8 @@
             </EditTemplate>
         </DataGridColumn>
         <DataGridCommandColumn>
-            <ChildContent>
-                <Button To="SUC">Prueba Me</Button>
-            </ChildContent>
-
             <NewCommandTemplate>
-    <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
+                <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
             </NewCommandTemplate>
             <EditCommandTemplate>
                 <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">
@@ -104,8 +118,10 @@
     private CSCUser SelectedItem { get; set; }
 
     public String? SearchFilter { get; set; } = null;
+    
     IList<CSCGroups> AllGroups;
 
+    IList<Department> Departments;
     //static string[] Grupos = { "MCR_CAE", "MCR_CCUsuario", "MCR_Desembolso", "MCR_Ejecutivos", "MCR_MC", "MCR_Tesoreria" };
     //static IEnumerable<CSCGroups> IndexedGroups = Enumerable.Range(1, Grupos.Length).Select(x => new CSCGroups { Name = Grupos[x - 1], Id = x });
 
@@ -127,6 +143,16 @@
 
             };
 
+            Departments = new List<Department>
+
+            {
+                new Department{Id = 1, Name = "TI"},
+
+                new Department{Id = 2 , Name = "Ventas"},
+
+                new Department{Id = 3 , Name = "Otra área"}
+            };
+
             await LoadUsers();
         }
         catch (Exception)
@@ -140,10 +166,10 @@
     {
         try
         {
-            UsersList.Add(new CSCUser() { Id = 1, Name = "Luis Jorge Carrillo", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 2, Name = "Rodolfo Pérez Diego", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 3, Name = "José Escudero", Position = "Desarrollador", Department = "TI", GroupId = 6 });
-            UsersList.Add(new CSCUser() { Id = 4, Name = "Jazmin Gayosso", Position = "Desarrollador", Department = "TI", GroupId = 6 });
+            UsersList.Add(new CSCUser() { Id = 1, Name = "Luis Jorge Carrillo", PositionId = 1, DepartmentId = 1, GroupId = 6 });
+            UsersList.Add(new CSCUser() { Id = 2, Name = "Rodolfo Pérez Diego", PositionId = 2, DepartmentId = 2, GroupId = 6 });
+            UsersList.Add(new CSCUser() { Id = 3, Name = "José Escudero", PositionId = 3, DepartmentId = 3, GroupId = 6 });
+            UsersList.Add(new CSCUser() { Id = 4, Name = "Jazmin Gayosso", PositionId = 4, DepartmentId = 4, GroupId = 6 });
 
 
         }
@@ -171,7 +197,7 @@
             return true;
         else
         {
-            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.Position.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) || model.Department.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase);
+            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase);
         }
 
     }

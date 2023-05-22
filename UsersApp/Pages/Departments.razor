@@ -1,7 +1,7 @@
 ﻿@page "/department"
 
 
-<Modal  Visible>
+<Modal Visible>
     <ModalContent Centered Size="ModalSize.ExtraLarge">
         <ModalHeader>
             <ModalTitle>Departamentos</ModalTitle>
@@ -25,13 +25,25 @@
                       HeaderThemeContrast="ThemeContrast.Light"
                       Sortable="false">
                 <PopupTitleTemplate>
-                    <ModalTitle>
-                        Editar Departamento
-                    </ModalTitle>
+                    @{
+                        if (SelectedItem.Id != 0)
+                        {
+                            <ModalTitle>
+                                Editar Departamento
+                            </ModalTitle>
+                        }
+                        else
+                        {
+                            <ModalTitle>
+                                Nuevo Departamento
+                            </ModalTitle>
+                        }
+                    }
+
                 </PopupTitleTemplate>
                 <DataGridColumns>
-                    <DataGridColumn TItem="Department" Field="@nameof(Department.Id)" Caption="#" TextAlignment="TextAlignment.Center"/>
-                    <DataGridColumn TItem="Department" Field="@nameof(Department.Name)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable  Width="80%" />
+                    <DataGridColumn TItem="Department" Field="@nameof(Department.Id)" Caption="#" TextAlignment="TextAlignment.Center" />
+                    <DataGridColumn TItem="Department" Field="@nameof(Department.Name)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable Width="80%" />
 
                     <DataGridCommandColumn>
                         <NewCommandTemplate>
@@ -66,7 +78,7 @@
 
                 <DetailRowTemplate>
                     @{
-                        var positions = (context as Department).PositionsList;
+                        var positions = (context as Department).TitlesList;
 
                         <DataGrid Narrow TItem="Title"
                               Data="positions" @bind-SelectedRow="@SelectedTitle"
@@ -85,10 +97,22 @@
                               Sortable="false"
                               HeaderThemeContrast="ThemeContrast.Light">
                             <PopupTitleTemplate>
-                                <ModalTitle>
-                                    Editar puesto
-                                </ModalTitle>
-                            </PopupTitleTemplate>
+                    @{
+                        if (SelectedTitle.Id != 0)
+                        {
+                            <ModalTitle>
+                                Editar Puesto
+                            </ModalTitle>
+                        }
+                        else
+                        {
+                            <ModalTitle>
+                                Nuevo Puesto
+                            </ModalTitle>
+                        }
+                    }
+
+                </PopupTitleTemplate>
                             <DataGridColumns>
                                 <DataGridColumn TItem="Title" Field="@nameof(Title.Id)" Caption="#" TextAlignment="TextAlignment.Center" />
                                 <DataGridColumn TItem="Title" Field="@nameof(Title.Name)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable />
@@ -134,9 +158,9 @@
 @code {
     public Modal modalRef;
 
-    public Title SelectedTitle { get; set; }
+    public Title SelectedTitle { get; set; } = new();
 
-    public Department SelectedItem { get; set; }
+    public Department SelectedItem { get; set; } = new();
 
     public IList<Department> AllDepartments { get; set; }
 
@@ -150,7 +174,7 @@
             {
                 new Department
                 {
-                    Id = 1, Name = "TI", PositionsList = new List<Title>
+                    Id = 1, Name = "TI", TitlesList = new List<Title>
                     {
                         new Title { Id = 1, Name = "Desarrollo" },
                         new Title { Id = 2, Name = "Infraestructura" }
@@ -159,7 +183,7 @@
 
                 new Department
                 {
-                    Id = 2 , Name = "Ventas", PositionsList = new List<Title>
+                    Id = 2 , Name = "Ventas", TitlesList = new List<Title>
                     {
                         new Title { Id = 1, Name = "Ejecutivo" },
                         new Title { Id = 2, Name = "Vendedor" }
