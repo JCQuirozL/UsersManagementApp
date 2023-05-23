@@ -4,7 +4,6 @@
         <h4 style="padding:2rem 0 1rem 0 !important;">Administración de Usuarios</h4>
     </Div>
 
-
     <Div Class="row">
         <FocusTrap Active>
             <TextEdit Autofocus Class="col-6 background"
@@ -12,7 +11,7 @@
             </TextEdit>
         </FocusTrap>
         <Div Class="col-6">
-            <Select TValue="int" @bind-SelectedValue=@ApplicationFilter Class="col-6 background">
+            <Select TValue="int" @bind-SelectedValue=@ApplicationFilter Class="col-12 background">
                 <SelectItem TValue="int" Value=0>Seleccione Aplicación</SelectItem>
                 <SelectItem TValue="int" Value=1>CSC</SelectItem>
                 <SelectItem TValue="int" Value=2>SUC</SelectItem>
@@ -45,7 +44,9 @@
     <DataGridAggregates>
         <DataGridAggregate Field="@nameof(User.IsActive)" Aggregate="DataGridAggregateType.TrueCount">
             <DisplayTemplate>
-                @($"Usuarios Activos: {context.Value}")
+                <Text Style="font-weight: bolder">
+                    @($"Usuarios Activos: {context.Value}")
+                </Text>
             </DisplayTemplate>
         </DataGridAggregate>
     </DataGridAggregates>
@@ -56,6 +57,24 @@
         </ModalTitle>
     </PopupTitleTemplate>
     <DataGridColumns>
+        <DataGridColumn Displayable=false TItem="User" Field="@nameof(User.ApplicationId)" Caption="APLICACIÓN" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var applicationId = (context as User)?.ApplicationId;
+                    @(Applications.FirstOrDefault(x=>x.Id == applicationId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="Application"
+                            Data="@Applications"
+                            Class="background"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
+            </EditTemplate>
+        </DataGridColumn>
         <DataGridColumn TItem="User" Field="@nameof(User.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
         <DataGridColumn TItem="User" Field="@nameof(User.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
             <DisplayTemplate>
@@ -111,24 +130,7 @@
                             SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
             </EditTemplate>
         </DataGridColumn>
-        <DataGridColumn TItem="User" Field="@nameof(User.ApplicationId)" Caption="APLICACIÓN" TextAlignment="TextAlignment.Center" Editable>
-            <DisplayTemplate>
-                @{
-                    var applicationId = (context as User)?.ApplicationId;
-                    @(Applications.FirstOrDefault(x=>x.Id == applicationId)?.Name)
-                }
-            </DisplayTemplate>
-            <EditTemplate>
-                <SelectList TValue="int"
-                            TItem="Application"
-                            Data="@Applications"
-                            Class="background"
-                            TextField="@((item)=>item.Name)"
-                            ValueField="@((item)=>item.Id)"
-                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
-                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
-            </EditTemplate>
-        </DataGridColumn>
+
         <DataGridCheckColumn TItem="User" Field="@nameof(User.IsActive)" Caption="ACTIVO" TextAlignment="TextAlignment.Center" Editable>
             <DisplayTemplate>
                 <Check TValue="Boolean" Checked="@context.IsActive" Disabled />

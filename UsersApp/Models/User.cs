@@ -26,18 +26,24 @@
     {
         public int Id { get; set; }
         public String Name { get; set; }
+
+        public Boolean IsActive { get; set; }
         public IList<Title> TitlesList { get; set; }
     }
     public class Title
     {
         public int Id { get; set; }
         public String Name { get; set; }
+
+        public Boolean IsActive { get; set; }
     }
 
     public class Rol
     {
         public int Id { get; set; }
         public String Name { get; set; }
+
+        public Boolean IsActive { get; set; }
 
     }
 
