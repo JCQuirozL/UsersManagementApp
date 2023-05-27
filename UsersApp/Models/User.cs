@@ -6,6 +6,12 @@
 
         public String Name { get; set; }
 
+        public String UserName { get; set; }
+
+        public String Email { get; set; }
+
+        public DateTime Created { get; set; }
+
         public int DepartmentId { get; set; }
         public int TitleId { get; set; }
 
@@ -14,6 +20,8 @@
         public int ApplicationId { get; set; }
 
         public Boolean IsActive { get; set; }
+        public Boolean IsBlocked { get; set; }
+
     }
 
     public class Application

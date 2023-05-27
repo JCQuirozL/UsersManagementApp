@@ -5,18 +5,27 @@
     </Div>
 
     <Div Class="row">
-        <FocusTrap Active>
-            <TextEdit Autofocus Class="col-6 background"
-                      Placeholder="Buscar" @bind-Text="@SearchFilter">
-            </TextEdit>
-        </FocusTrap>
-        <Div Class="col-6">
+        <Div Class="col-6 ">
+            <FocusTrap Active>
+                <TextEdit Autofocus Class="background"
+                          Placeholder="Buscar" @bind-Text="@SearchFilter">
+                </TextEdit>
+            </FocusTrap>
+        </Div>
+        <Div Class="col-4">
             <Select TValue="int" @bind-SelectedValue=@ApplicationFilter Class="col-12 background">
                 <SelectItem TValue="int" Value=0>Seleccione Aplicación</SelectItem>
                 <SelectItem TValue="int" Value=1>CSC</SelectItem>
                 <SelectItem TValue="int" Value=2>SUC</SelectItem>
                 <SelectItem TValue="int" Value=3>Desembolso Electrónico</SelectItem>
             </Select>
+        </Div>
+        <Div Class="col-2">
+            <Tooltip Fade Text="Exportar listado" Placement="TooltipPlacement.Top">
+                <Button Style="background-color: transparent !important; box-shadow: none !important;">
+                    <Icon Name="@("fas fa-download")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                </Button>
+            </Tooltip>
         </Div>
     </Div>
 </Div>
@@ -76,6 +85,8 @@
             </EditTemplate>
         </DataGridColumn>
         <DataGridColumn TItem="User" Field="@nameof(User.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="User" Field="@nameof(User.UserName)" Caption="USUARIO" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="User" Field="@nameof(User.Email)" Caption="E-MAIL" TextAlignment="TextAlignment.Center" Editable />
         <DataGridColumn TItem="User" Field="@nameof(User.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
             <DisplayTemplate>
                 @{
@@ -131,14 +142,39 @@
             </EditTemplate>
         </DataGridColumn>
 
-        <DataGridCheckColumn TItem="User" Field="@nameof(User.IsActive)" Caption="ACTIVO" TextAlignment="TextAlignment.Center" Editable>
+ <DataGridCheckColumn TItem="User" Field="@nameof(User.IsActive)" Caption="ACTIVO" TextAlignment="TextAlignment.Center" Editable CellsEditableOnEditCommand=true CellsEditableOnNewCommand=false>
             <DisplayTemplate>
-                <Check TValue="Boolean" Checked="@context.IsActive" Disabled />
+                <Div Class="centered">
+                    <Check TValue="Boolean" Checked="@context.IsActive" Disabled />
+                </Div>
             </DisplayTemplate>
             <EditTemplate>
-                <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+                @*@{
+                    var userId = context.Item.Id;
+                    if (userId != 0)
+                    {*@
+                        <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+                    @*}
+                }*@
             </EditTemplate>
         </DataGridCheckColumn>
+        <DataGridCheckColumn TItem="User" Field="@nameof(User.IsBlocked)" Caption="BLOQUEADO" TextAlignment="TextAlignment.Center" Editable CellsEditableOnEditCommand=true CellsEditableOnNewCommand=false>
+            <DisplayTemplate>
+                <Div Class="centered">
+                    <Check TValue="Boolean" Checked="@context.IsBlocked" Disabled />
+                </Div>
+            </DisplayTemplate>
+            <EditTemplate>
+                @*@{
+                    var userId = context.Item.Id;
+                    if (userId != 0)
+                    {*@
+                        <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+                    @*}
+                }*@
+            </EditTemplate>
+        </DataGridCheckColumn>
+        <DataGridColumn TItem="User" Field="@nameof(User.Created)" Caption="CREADO" TextAlignment="TextAlignment.Center" DisplayFormat="{0:dd/MM/yyyy}" />
         <DataGridCommandColumn>
             <NewCommandTemplate>
                 <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
@@ -230,11 +266,11 @@
 
             UsersList = new List<User>
             {
-                new User {Id=1, Name = "Luis Jorge Carrillo", ApplicationId = 1, DepartmentId = 1, RolId = 1, TitleId = 1, IsActive = false },
-                new User {Id=1, Name = "Rodolfo Pérez", ApplicationId = 2, DepartmentId = 2, RolId = 2, TitleId = 2, IsActive = true },
-                new User {Id=1, Name = "José Escudero", ApplicationId = 1, DepartmentId = 1, RolId = 1, TitleId = 1, IsActive = true },
-                new User {Id=1, Name = "Ricardo Lomas", ApplicationId = 3, DepartmentId = 3, RolId = 3, TitleId = 3, IsActive = true },
-                new User {Id=1, Name = "Jazmín Gayosso", ApplicationId = 2, DepartmentId = 3, RolId = 4, TitleId = 2, IsActive = false },
+                new User {Id=1, Name = "Luis Jorge Carrillo", UserName="XMX7686", Email="correo1@bbva.com", ApplicationId = 1, DepartmentId = 1, RolId = 1, TitleId = 1, IsActive = false, Created = DateTime.Now },
+                new User {Id=1, Name = "Rodolfo Pérez", UserName="MBXXXX",Email="correo2@bbva.com", ApplicationId = 2, DepartmentId = 2, RolId = 2, TitleId = 2, IsActive = true, Created = DateTime.Now },
+                new User {Id=1, Name = "José Escudero",UserName="MBXXXX", Email="correo3@bbva.com", ApplicationId = 1, DepartmentId = 1, RolId = 1, TitleId = 1, IsActive = true, Created = DateTime.Now },
+                new User {Id=1, Name = "Ricardo Lomas",UserName="MBXXXX", Email="correo4@bbva.com", ApplicationId = 3, DepartmentId = 3, RolId = 3, TitleId = 3, IsActive = true, Created = DateTime.Now },
+                new User {Id=1, Name = "Jazmín Gayosso",UserName="MBXXXX", Email="correo5@bbva.com", ApplicationId = 2, DepartmentId = 3, RolId = 4, TitleId = 2, IsActive = false, Created = DateTime.Now },
 
 
             };
@@ -296,4 +332,4 @@
         return true;
 
     }
-}
+                }
