@@ -1,0 +1,57 @@
+﻿@page "/login"
+
+<Bar Position="Position.Static" Class="navbar-bg" Breakpoint="Breakpoint.Desktop"
+             ThemeContrast="ThemeContrast.Light">
+    <BarBrand>
+        <img src="img/logobbvaleasing.png" width="132" height="50" style="margin: 1rem 25rem 1rem 1rem;" />
+   </BarBrand>
+   <BarToggler />
+    @*<BarMenu>
+        <BarEnd>
+            <BarItem>
+                <Text Style="color:#FFFF;">Bienvenido</Text>
+                <Anchor Style="color:#FFFF;" >Luis Jorge Carrillo</Anchor>
+            </BarItem>
+        </BarEnd>
+   </BarMenu>*@
+</Bar>
+
+<Div Class="col-9">
+    <Div Class="row">
+        <h4 style="padding:2rem 0 1rem 0 !important;">Inicio de Sesión</h4>
+    </Div>
+
+    <Div Class="row">
+        <Paragraph Style="padding:2rem 0 1rem 0 !important;">Para continuar es necesario autenticarse.</Paragraph>
+    </Div>
+</Div>
+<Div Class="col-4">
+    <Form>
+    <Field>
+        <FieldLabel>Usuario</FieldLabel>
+        <TextEdit Role="TextRole.Text" Placeholder="Usuario" />
+    </Field>
+    <Field>
+        <FieldLabel>Contraseña</FieldLabel>
+        <Validation UsePattern>
+            <TextEdit Role="TextRole.Password" Pattern="[A-Za-z]{3}" Placeholder="Contraseña">
+                <Feedback>
+                    <ValidationError>La contraseña no es correcta</ValidationError>
+                </Feedback>
+            </TextEdit>
+        </Validation>
+    </Field>
+    <Field Class="col-12">
+        <Button Color="Color.Primary" Type="ButtonType.Submit" PreventDefaultOnSubmit>Enviar</Button>
+    </Field>
+    </Form>
+    <Field Class="col-12">
+        <Anchor Style="cursor:pointer;">Olvidé mi contraseña</Anchor>
+    </Field>
+</Div>
+
+
+
+@code {
+
+}
