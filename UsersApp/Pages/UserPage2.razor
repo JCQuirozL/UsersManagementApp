@@ -1,0 +1,381 @@
+﻿@page "/User2"
+<Div Class="col-9">
+    <Div Class="row">
+        <h4 style="padding:2rem 0 1rem 0 !important;">Administración de Usuarios</h4>
+    </Div>
+
+    <Div Class="row">
+        <Div Class="col-6 ">
+            <FocusTrap Active>
+                <TextEdit Autofocus Class="background"
+                          Placeholder="Buscar" @bind-Text="@SearchFilter">
+                </TextEdit>
+            </FocusTrap>
+        </Div>
+        <Div Class="col-4">
+            <Select TValue="int" @bind-SelectedValue=@ApplicationFilter Class="col-12 background">
+                <SelectItem TValue="int" Value=0>Seleccione Aplicación</SelectItem>
+                <SelectItem TValue="int" Value=1>CSC</SelectItem>
+                <SelectItem TValue="int" Value=2>SUC</SelectItem>
+                <SelectItem TValue="int" Value=3>Desembolso Electrónico</SelectItem>
+            </Select>
+        </Div>
+        <Div Class="col-2">
+            <Tooltip Fade Text="Exportar listado" Placement="TooltipPlacement.Top">
+                <Button Style="background-color: transparent !important; box-shadow: none !important;">
+                    <Icon Name="@("fas fa-download")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                </Button>
+            </Tooltip>
+        </Div>
+    </Div>
+</Div>
+
+<Div Class="col-9">
+    <Div Class="row">
+        <Paragraph Style="padding:4rem 0 1rem 0 !important;">A continuación se muestra el listado de usuarios</Paragraph>
+    </Div>
+</Div>
+
+<DataGrid TItem="User2" Data="UsersList" @bind-SelectedRow="@SelectedItem"
+          Editable
+          ShowPager
+          PageSize=5
+          Responsive="true"
+          EditMode="DataGridEditMode.Popup"
+          FixedHeader="true"
+          Hoverable
+          CommandMode="DataGridCommandMode.Commands"
+          UseInternalEditing=true
+          Style="margin-bottom: 0 !important;" UseValidation=true
+          SelectedRowStyling="@OnSelectedRowStyling"
+          RowStyling="@OnRowStyling"
+          CustomFilter="@OnCustomFilter"
+          DetailRowTrigger="@OnDetailRowShow">
+    <DataGridAggregates>
+        <DataGridAggregate Field="@nameof(User2.IsActive)" Aggregate="DataGridAggregateType.TrueCount">
+            <DisplayTemplate>
+                <Text Style="font-weight: bolder">
+                    @($"Usuarios Activos: {context.Value}")
+                </Text>
+            </DisplayTemplate>
+        </DataGridAggregate>
+    </DataGridAggregates>
+
+    <PopupTitleTemplate>
+        <ModalTitle>
+            Editar usuario
+        </ModalTitle>
+    </PopupTitleTemplate>
+    <DataGridColumns>
+        <DataGridColumn Displayable=false TItem="User2" Field="@nameof(User2.ApplicationId)" Caption="APLICACIÓN" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var applicationId = (context as User2)?.ApplicationId;
+                    @(Applications.FirstOrDefault(x=>x.Id == applicationId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="Application2"
+                            Data="@Applications"
+                            Class="background"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})" />
+            </EditTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="User2" Field="@nameof(User2.Name)" Caption="NOMBRE" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="User2" Field="@nameof(User2.UserName)" Caption="USUARIO" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="User2" Field="@nameof(User2.Email)" Caption="E-MAIL" TextAlignment="TextAlignment.Center" Editable />
+        <DataGridColumn TItem="User2" Field="@nameof(User2.DepartmentId)" Caption="DEPARTAMENTO" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var departmentId = (context as User2)?.DepartmentId;
+                    @(Departments.FirstOrDefault(x=>x.Id == departmentId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="Department2"
+                            Data="@Departments"
+                            Class="background"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})"
+                            DefaultItemValue="1" />
+            </EditTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="User2" Field="@nameof(User2.TitleId)" Caption="PUESTO" TextAlignment="TextAlignment.Center" Editable>
+            <DisplayTemplate>
+                @{
+                    var titleId = (context as User2)?.TitleId;
+                    @(Titles.FirstOrDefault(x=>x.Id == titleId)?.Name)
+                }
+            </DisplayTemplate>
+            <EditTemplate>
+                <SelectList TValue="int"
+                            TItem="Title2"
+                            Data="@Titles"
+                            Class="background"
+                            TextField="@((item)=>item.Name)"
+                            ValueField="@((item)=>item.Id)"
+                            SelectedValue="@((int)((CellEditContext)context).CellValue)"
+                            SelectedValueChanged="@(e => {context.CellValue = Convert.ToInt32(e);})"
+                            DefaultItemValue="1" />
+            </EditTemplate>
+        </DataGridColumn>
+        <DataGridCheckColumn TItem="User2" Field="@nameof(User2.IsActive)" Caption="ACTIVO" TextAlignment="TextAlignment.Center" Editable CellsEditableOnEditCommand=true CellsEditableOnNewCommand=false>
+            <DisplayTemplate>
+                <Div Class="centered">
+                    <Check TValue="Boolean" Checked="@context.IsActive" Disabled />
+                </Div>
+            </DisplayTemplate>
+            <EditTemplate>
+                <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+            </EditTemplate>
+        </DataGridCheckColumn>
+        <DataGridCheckColumn TItem="User2" Field="@nameof(User2.IsBlocked)" Caption="BLOQUEADO" TextAlignment="TextAlignment.Center" Editable CellsEditableOnEditCommand=true CellsEditableOnNewCommand=false>
+            <DisplayTemplate>
+                <Div Class="centered">
+                    <Check TValue="Boolean" Checked="@context.IsBlocked" Disabled />
+                </Div>
+            </DisplayTemplate>
+            <EditTemplate>
+                <Check TValue="Boolean" Checked="@((Boolean)((CellEditContext)context).CellValue)" CheckedChanged="@(e => {context.CellValue = Convert.ToBoolean(e);})" />
+            </EditTemplate>
+        </DataGridCheckColumn>
+        <DataGridColumn TItem="User2" Field="@nameof(User2.Created)" Caption="CREADO" TextAlignment="TextAlignment.Center" DisplayFormat="{0:dd/MM/yyyy}" />
+        <DataGridCommandColumn>
+            <NewCommandTemplate>
+                <Button Color="Color.Primary" Clicked="@context.Clicked">Nuevo</Button>
+            </NewCommandTemplate>
+            <EditCommandTemplate>
+                <Tooltip Fade Text="Editar" Placement="TooltipPlacement.Top">
+                    <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                        <Icon Name="@("fas fa-user-edit")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                    </Button>
+                </Tooltip>
+            </EditCommandTemplate>
+            <DeleteCommandTemplate>
+                <Tooltip Fade Text="Eliminar" Placement="TooltipPlacement.Top">
+                    <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@context.Clicked">
+                        <Icon Name="@("fas fa-trash-alt")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                    </Button>
+                </Tooltip>
+            </DeleteCommandTemplate>
+            <SaveCommandTemplate>
+                <Button ElementId="btnSave" Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary"
+                        Clicked="@context.Clicked" Size="Size.Large">
+                    Guardar
+                </Button>
+            </SaveCommandTemplate>
+            <CancelCommandTemplate>
+                <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@context.Clicked" Size="Size.Large">Cancelar</Button>
+            </CancelCommandTemplate>
+        </DataGridCommandColumn>
+    </DataGridColumns>
+
+
+    @*Listado de Roles del Usuario*@
+    <DetailRowTemplate>
+        @{
+            var roles = (context as User2).Roles;
+            <DataGrid Narrow
+                  TItem="UsersInRoles"
+                  Data="roles"
+                      @bind-SelectedRow="@SelectedRole"
+                      Editable
+                      Responsive
+                  EditMode="DataGridEditMode.Popup"
+                  FixedHeader="true"
+                      Hoverable
+                  CommandMode="DataGridCommandMode.Commands"
+                  UseInternalEditing=true
+                  UseValidation=true
+                  RowStyling="@OnRowStylingRol"
+                  SelectedRowStyling="@OnSelectedRowStylingRol"
+                  Context="anotherContext"
+                  Style="margin-bottom: 0 !important;"
+                  Sortable="false"
+                  HeaderThemeContrast="ThemeContrast.Light">
+                <PopupTitleTemplate>
+                    <ModalTitle>
+                        Asignar Rol
+                    </ModalTitle>
+                </PopupTitleTemplate>
+                <DataGridColumns>
+                    <DataGridColumn TItem="UsersInRoles" Field="@nameof(UsersInRoles.RoleId)" Caption="ROL(ES) DEL USUARIO" TextAlignment="TextAlignment.Center" Editable>
+                        <DisplayTemplate Context="rolContext">
+                            @{
+                                var roleId = (rolContext as UsersInRoles)?.RoleId;
+                                @(Roles.FirstOrDefault(x=>x.Id == roleId)?.Name)
+                            }
+                        </DisplayTemplate>
+                        <EditTemplate Context="rolContext">
+                            <SelectList TValue="int"
+                                    TItem="Rol2"
+                                    Data="@Roles"
+                                    TextField="@((item)=>item.Name)"
+                                    ValueField="@((item)=>item.Id)"
+                                    SelectedValue="@((int)((CellEditContext)rolContext).CellValue)"
+                                    
+                                    
+                                        Multiple
+                                        @bind-SelectedValues="@SelectedRoles" />
+                        </EditTemplate>
+                    </DataGridColumn>
+                    <DataGridCommandColumn EditCommandAllowed=false NewCommandAllowed="true" Context="anotherContext">
+                        <NewCommandTemplate>
+                            <Button Visibility="Visibility.Visible" Color="Color.Secondary" Clicked="@anotherContext.Clicked">Asignar Nuevo Rol</Button>
+                        </NewCommandTemplate>
+                        <DeleteCommandTemplate>
+                            <Tooltip Fade Text="Eliminar" Placement="TooltipPlacement.Top">
+                                <Button Style="min-width: 1rem !important; background-color: transparent !important; box-shadow: none !important;" Outline Clicked="@anotherContext.Clicked">
+                                    <Icon Name="@("fas fa-trash-alt")" IconStyle="IconStyle.DuoTone" IconSize="IconSize.Large" Class="icons-color"></Icon>
+                                </Button>
+                            </Tooltip>
+                        </DeleteCommandTemplate>
+                        <SaveCommandTemplate>
+                            <Button ElementId="btnSave" Type="ButtonType.Submit" PreventDefaultOnSubmit Color="Color.Primary"
+                                Clicked="@anotherContext.Clicked" Size="Size.Large">
+                                Guardar
+                            </Button>
+                        </SaveCommandTemplate>
+                        <CancelCommandTemplate>
+                            <Button ElementId="btnCancel" Color="Color.Secondary" Clicked="@anotherContext.Clicked" Size="Size.Large">Cancelar</Button>
+                        </CancelCommandTemplate>
+                    </DataGridCommandColumn>
+                </DataGridColumns>
+            </DataGrid>
+        }
+    </DetailRowTemplate>
+</DataGrid>
+
+
+@code {
+
+    public List<User2> UsersList = new();
+
+    private User2 SelectedItem { get; set; }
+
+    public String? SearchFilter { get; set; } = null;
+
+    public int ApplicationFilter { get; set; } = 0;
+
+    IList<Department2> Departments;
+
+    IList<Title2> Titles;
+
+    IList<Rol2> Roles;
+
+    IList<Application2> Applications;
+
+    private UsersInRoles SelectedRole { get; set; }
+
+    private IReadOnlyList<int> SelectedRoles {  get;  set;  }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Applications = new List<Application2>
+    {
+    new Application2 {Id=1, Name = "CSC"},
+    new Application2 {Id=2, Name = "SUC"},
+    new Application2 {Id=3, Name = "DESEMBOLSO ELECTRÓNICO"}
+    };
+
+            Departments = new List<Department2>
+    {
+    new Department2{Id = 1, Name = "TI"},
+    new Department2{Id = 2 , Name = "Ventas"},
+    new Department2{Id = 3 , Name = "Seguros"}
+    };
+
+            Titles = new List<Title2>
+
+    {
+    new Title2 {Id = 1, Name = "Desarrollador"},
+
+    new Title2 {Id = 2 , Name = "Ejecutivo"},
+
+    new Title2 {Id = 3 , Name = "Ejecutivo 2"}
+    };
+
+            Roles = new List<Rol2>
+            {
+                new Rol2 {Id = 1, Name = "MCR_CCUsuario"},
+                new Rol2 {Id = 2, Name = "MCR_Ejecutivos"},
+                new Rol2 {Id = 3, Name = "MCR_Tesorería"},
+                new Rol2 {Id = 4, Name = "Autorizador"},
+                new Rol2 {Id = 5, Name = "Generación Desembolso"}
+            };
+
+            UsersList = new List<User2>
+            {
+                new User2 {Id=1, Name = "Luis Jorge Carrillo", UserName="XMX7686", Email="correo1@bbva.com", ApplicationId = 1, DepartmentId = 1,TitleId = 1, IsActive = false, Created = DateTime.Now, IsBlocked = false, Roles = new List<UsersInRoles>{ new UsersInRoles { RoleId = 1, UserId = 1 }  }  },
+                      new User2 {Id=2, Name = "Rodolfo Pérez Diegp", UserName="XMX1234", Email="correo1@bbva.com", ApplicationId = 1, DepartmentId = 1,TitleId = 1, IsActive = false, Created = DateTime.Now, IsBlocked = false, Roles = new List<UsersInRoles>{ new UsersInRoles { RoleId = 1, UserId = 2 }  }  },
+
+            };
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+
+    public static void OnSelectedRowStyling(User2 user, DataGridRowStyling style)
+    {
+        style.Color = Color.Secondary;
+    }
+
+    public static void OnSelectedRowStylingRol(UsersInRoles rol, DataGridRowStyling style)
+    {
+        style.Color = Color.Secondary;
+    }
+
+    //Evento para pintar el fondo de la fila
+    public static void OnRowStyling(User2 user, DataGridRowStyling style)
+    {
+        style.Background = Background.Default;
+    }
+
+    public static void OnRowStylingRol(UsersInRoles rol, DataGridRowStyling style)
+    {
+        style.Background = Background.Default;
+    }
+
+    public Boolean OnDetailRowShow(DetailRowTriggerEventArgs<User2> e)
+    {
+        //con ésta propiedad indicamos que el detalle se cerrará al dar clic en la misma fila o en una diferente,
+        //sólo un detalle abierto a la vez
+        e.Single = true;
+        return ((e.Item.Id == SelectedItem?.Id));
+    }
+
+    public Boolean OnCustomFilter(User2 model)
+    {
+        if (string.IsNullOrEmpty(SearchFilter) && ApplicationFilter == 0)
+            return true;
+
+        if (SearchFilter != null && ApplicationFilter == 0)
+        {
+            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (SearchFilter != null && ApplicationFilter != 0)
+        {
+            return model.Name.Contains(SearchFilter, StringComparison.OrdinalIgnoreCase) && (model.ApplicationId == ApplicationFilter) == true;
+        }
+
+        if (SearchFilter == null && ApplicationFilter != 0)
+            return (model.ApplicationId == ApplicationFilter) == true;
+
+        return true;
+
+    }
+}
